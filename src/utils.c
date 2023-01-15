@@ -6,7 +6,7 @@
 /*   By: aradice <aradice@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 02:16:53 by aradice           #+#    #+#             */
-/*   Updated: 2023/01/15 02:21:28 by aradice          ###   ########.fr       */
+/*   Updated: 2023/01/16 00:43:48 by aradice          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,51 @@ int	ft_atoi(const char *str)
 	return (nb * sign);
 }
 
-void	*ft_memset(void *pointer, int value, size_t count)
+time_t	ft_convert_time(void)
 {
-	size_t			i;
-	unsigned char	*p;
+	struct timeval	time;
 
-	i = 0;
-	p = pointer;
-	while (i < count)
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+}
+
+void	ft_write_text(t_data *data, int id, char *str)
+{
+	pthread_mutex_lock(&data->display);
+	if (!(data->philo_dead))
+		printf("[%ld] %d %s\n", ft_convert_time()
+			- data->init_time, id + 1, str);
+	pthread_mutex_unlock(&data->display);
+}
+
+void	ft_check_time(t_data *data, time_t time)
+{
+	time_t	t;
+
+	t = ft_convert_time();
+	while (!(data->philo_dead))
 	{
-		*p = value;
-		p++;
-		i++;
+		if (ft_convert_time() - t >= time)
+			break ;
+		usleep(50);
 	}
-	return (pointer);
+}
+
+void	ft_exit_program(t_data *data, t_table *table)
+{
+	t_table	*temp;
+
+	temp = table;
+	while (temp)
+	{
+		if (temp->type == FORK)
+		{
+			pthread_mutex_destroy(&(temp->mutex));
+			temp = temp->next;
+		}
+		if (temp == table)
+			break ;
+	}
+	pthread_mutex_destroy(&(data->display));
+	pthread_mutex_destroy(&(data->meal));
 }

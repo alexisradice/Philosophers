@@ -1,6 +1,11 @@
 NAME = philo
 
-SRC = src/philo.c src/utils.c
+SRC =	src/philo.c \
+		src/init.c \
+		src/utils.c \
+		src/args.c \
+		src/philo_die.c \
+		src/philo_state.c \
 
 OBJ = $(SRC:.c=.o)
 
