@@ -6,7 +6,7 @@
 /*   By: aradice <aradice@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 22:35:53 by aradice           #+#    #+#             */
-/*   Updated: 2023/01/15 22:38:13 by aradice          ###   ########.fr       */
+/*   Updated: 2023/01/17 01:02:33 by aradice          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,15 @@ t_arguments	*ft_args_parsing(t_data *data, int argc, char **argv)
 	args->time_eat = ft_atoi(argv[3]);
 	args->time_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
-		args->nb_times_philos_must_eat = ft_atoi(argv[5]);
+		args->nb_philos_must_eat = ft_atoi(argv[5]);
 	else
-		args->nb_times_philos_must_eat = -1;
-	data->nb_each_ate = 0;
-	data->philo_dead = 0;
+		args->nb_philos_must_eat = -1;
+	data->bool_all_ate = 0;
+	data->bool_philo_dead = 0;
 	data->args = args;
-	if (pthread_mutex_init(&(data->display), NULL))
+	if (pthread_mutex_init(&data->display, NULL))
 		return (NULL);
-	if (pthread_mutex_init(&(data->meal), NULL))
+	if (pthread_mutex_init(&data->meal, NULL))
 		return (NULL);
 	return (args);
 }

@@ -6,7 +6,7 @@
 /*   By: aradice <aradice@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 02:16:50 by aradice           #+#    #+#             */
-/*   Updated: 2023/01/16 00:42:45 by aradice          ###   ########.fr       */
+/*   Updated: 2023/01/17 01:11:47 by aradice          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	ft_process(&data, table);
+	free(args);
 	return (0);
 }
 
@@ -41,13 +42,13 @@ void	ft_process(t_data *data, t_table *table)
 
 	i = 0;
 	temp = table;
-	data->init_time = ft_convert_time();
+	data->start_time = ft_convert_time();
 	while (temp)
 	{
 		if (temp->type == PHILO)
 		{
 			pthread_create(&temp->thread, NULL, ft_sleep_and_think, temp);
-			temp->last_meal = ft_convert_time();
+			temp->time_last_meal = ft_convert_time();
 		}
 		temp = temp->next;
 		i++;
@@ -69,6 +70,5 @@ void	ft_process_2(t_data *data, t_table *table, t_table *temp)
 		if (temp == table)
 			break ;
 	}
-	if (data->args->nb_philos > 1)
-		ft_exit_program(data, table);
+	ft_exit_program(data, table);
 }

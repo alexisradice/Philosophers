@@ -6,7 +6,7 @@
 /*   By: aradice <aradice@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 02:16:53 by aradice           #+#    #+#             */
-/*   Updated: 2023/01/16 00:43:48 by aradice          ###   ########.fr       */
+/*   Updated: 2023/01/17 01:17:33 by aradice          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,18 @@ time_t	ft_convert_time(void)
 void	ft_write_text(t_data *data, int id, char *str)
 {
 	pthread_mutex_lock(&data->display);
-	if (!(data->philo_dead))
-		printf("[%ld] %d %s\n", ft_convert_time()
-			- data->init_time, id + 1, str);
+	if (!(data->bool_philo_dead))
+		printf("[%ldms] - Philo %d %s\n", ft_convert_time()
+			- data->start_time, id + 1, str);
 	pthread_mutex_unlock(&data->display);
 }
 
-void	ft_check_time(t_data *data, time_t time)
+void	ft_wait_time(t_data *data, time_t time)
 {
 	time_t	t;
 
 	t = ft_convert_time();
-	while (!(data->philo_dead))
+	while (!(data->bool_philo_dead))
 	{
 		if (ft_convert_time() - t >= time)
 			break ;
@@ -72,18 +72,27 @@ void	ft_check_time(t_data *data, time_t time)
 void	ft_exit_program(t_data *data, t_table *table)
 {
 	t_table	*temp;
+	t_table	*temp2;
+	int		i;
 
+	i = 0;
 	temp = table;
 	while (temp)
 	{
 		if (temp->type == FORK)
-		{
-			pthread_mutex_destroy(&(temp->mutex));
-			temp = temp->next;
-		}
+			pthread_mutex_destroy(&temp->mutex);
+		temp = temp->next;
 		if (temp == table)
 			break ;
 	}
-	pthread_mutex_destroy(&(data->display));
-	pthread_mutex_destroy(&(data->meal));
+	temp = table;
+	while (i < data->args->nb_philos * 2)
+	{
+		temp2 = temp;
+		temp = temp->next;
+		free(temp2);
+		i++;
+	}
+	pthread_mutex_destroy(&data->display);
+	pthread_mutex_destroy(&data->meal);
 }

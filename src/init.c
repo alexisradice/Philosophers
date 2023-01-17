@@ -6,7 +6,7 @@
 /*   By: aradice <aradice@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 22:36:33 by aradice           #+#    #+#             */
-/*   Updated: 2023/01/15 22:38:08 by aradice          ###   ########.fr       */
+/*   Updated: 2023/01/17 01:11:47 by aradice          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,18 @@ t_table	*ft_table_init(t_data *data, t_arguments *args, int i)
 	t_table	*fork;
 	t_table	*philosopher;
 
-	first = ft_philo_or_fork_init(PHILO, *args, 0, data);
-	fork = ft_philo_or_fork_init(FORK, *args, 0, data);
+	first = ft_philo_or_fork_init(PHILO, data, *args, 0);
+	fork = ft_philo_or_fork_init(FORK, data, *args, 0);
 	first->next = fork;
 	fork->prev = first;
 	prev = fork;
 	i = 1;
 	while (i < args->nb_philos)
 	{
-		philosopher = ft_philo_or_fork_init(PHILO, *args, i, data);
+		philosopher = ft_philo_or_fork_init(PHILO, data, *args, i);
 		prev->next = philosopher;
 		philosopher->prev = prev;
-		fork = ft_philo_or_fork_init(FORK, *args, i, data);
+		fork = ft_philo_or_fork_init(FORK, data, *args, i);
 		philosopher->next = fork;
 		fork->prev = philosopher;
 		prev = fork;
@@ -41,8 +41,8 @@ t_table	*ft_table_init(t_data *data, t_arguments *args, int i)
 	return (first);
 }
 
-t_table	*ft_philo_or_fork_init(t_type type,
-	t_arguments args, int nb, t_data *data)
+t_table	*ft_philo_or_fork_init(t_type type, t_data *data,
+	t_arguments args, int nb)
 {
 	t_table	*table;
 
@@ -54,8 +54,8 @@ t_table	*ft_philo_or_fork_init(t_type type,
 	table->args = args;
 	table->type = type;
 	table->id = nb;
-	table->last_meal = 0;
-	table->finished_meal = 0;
+	table->time_last_meal = 0;
+	table->nb_finished_meal = 0;
 	table->data = data;
 	table->next = NULL;
 	table->prev = NULL;
