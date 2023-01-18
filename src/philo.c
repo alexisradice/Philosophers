@@ -6,7 +6,7 @@
 /*   By: aradice <aradice@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 02:16:50 by aradice           #+#    #+#             */
-/*   Updated: 2023/01/17 01:11:47 by aradice          ###   ########.fr       */
+/*   Updated: 2023/01/18 20:07:02 by aradice          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,7 @@ int	main(int argc, char **argv)
 void	ft_process(t_data *data, t_table *table)
 {
 	t_table	*temp;
-	int		i;
 
-	i = 0;
 	temp = table;
 	data->start_time = ft_convert_time();
 	while (temp)
@@ -48,10 +46,11 @@ void	ft_process(t_data *data, t_table *table)
 		if (temp->type == PHILO)
 		{
 			pthread_create(&temp->thread, NULL, ft_sleep_and_think, temp);
+			pthread_mutex_lock(&data->meal);
 			temp->time_last_meal = ft_convert_time();
+			pthread_mutex_unlock(&data->meal);
 		}
 		temp = temp->next;
-		i++;
 		if (temp == table)
 			break ;
 	}

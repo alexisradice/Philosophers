@@ -6,7 +6,7 @@
 /*   By: aradice <aradice@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 02:16:53 by aradice           #+#    #+#             */
-/*   Updated: 2023/01/17 01:17:33 by aradice          ###   ########.fr       */
+/*   Updated: 2023/01/18 19:45:05 by aradice          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,27 @@ time_t	ft_convert_time(void)
 
 void	ft_write_text(t_data *data, int id, char *str)
 {
-	pthread_mutex_lock(&data->display);
+	pthread_mutex_lock(&data->dead);
 	if (!(data->bool_philo_dead))
 		printf("[%ldms] - Philo %d %s\n", ft_convert_time()
 			- data->start_time, id + 1, str);
-	pthread_mutex_unlock(&data->display);
+	pthread_mutex_unlock(&data->dead);
 }
 
 void	ft_wait_time(t_data *data, time_t time)
 {
 	time_t	t;
+	int		bool_philo_dead;
 
+	pthread_mutex_lock(&data->dead);
+	bool_philo_dead = data->bool_philo_dead;
+	pthread_mutex_unlock(&data->dead);
 	t = ft_convert_time();
-	while (!(data->bool_philo_dead))
+	while (!(bool_philo_dead))
 	{
+		pthread_mutex_lock(&data->dead);
+		bool_philo_dead = data->bool_philo_dead;
+		pthread_mutex_unlock(&data->dead);
 		if (ft_convert_time() - t >= time)
 			break ;
 		usleep(50);
@@ -95,4 +102,5 @@ void	ft_exit_program(t_data *data, t_table *table)
 	}
 	pthread_mutex_destroy(&data->display);
 	pthread_mutex_destroy(&data->meal);
+	pthread_mutex_destroy(&data->dead);
 }

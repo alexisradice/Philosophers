@@ -12,11 +12,12 @@ OBJ = $(SRC:.c=.o)
 CC = gcc
 
 CFLAGS = -Wall -Werror -Wextra -g3
+CFLAGS = -g3
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -g -pthread -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -g -pthread -g -o $(NAME)
 
 clean:
 	rm -rf $(OBJ)

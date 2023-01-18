@@ -6,7 +6,7 @@
 /*   By: aradice <aradice@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 02:15:46 by alexis            #+#    #+#             */
-/*   Updated: 2023/01/17 01:17:33 by aradice          ###   ########.fr       */
+/*   Updated: 2023/01/18 20:06:50 by aradice          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_table {
 typedef struct s_data {
 	pthread_mutex_t	display;
 	pthread_mutex_t	meal;
+	pthread_mutex_t	dead;
 	t_arguments		*args;
 	time_t			start_time;
 	int				bool_all_ate;
@@ -67,7 +68,8 @@ t_table		*ft_philo_or_fork_init(t_type type, t_data *data,
 				t_arguments args, int nb);
 void		ft_process(t_data *data, t_table *table);
 void		ft_process_2(t_data *data, t_table *table, t_table *temp);
-void		ft_philo_eat(t_table *table);
+void		ft_philo_eat_left(t_table *table);
+void		ft_philo_eat_right(t_table *table);
 void		*ft_sleep_and_think(void *table);
 void		ft_one_philo_eat(t_table *table);
 void		ft_philo_die(t_data *data, t_table	*table);

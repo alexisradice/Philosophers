@@ -6,7 +6,7 @@
 /*   By: aradice <aradice@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 22:36:33 by aradice           #+#    #+#             */
-/*   Updated: 2023/01/17 01:11:47 by aradice          ###   ########.fr       */
+/*   Updated: 2023/01/18 20:06:40 by aradice          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 t_table	*ft_table_init(t_data *data, t_arguments *args, int i)
 {
+	t_table	*philo;
+	t_table	*fork;
 	t_table	*first;
 	t_table	*prev;
-	t_table	*fork;
-	t_table	*philosopher;
 
 	first = ft_philo_or_fork_init(PHILO, data, *args, 0);
 	fork = ft_philo_or_fork_init(FORK, data, *args, 0);
@@ -27,12 +27,12 @@ t_table	*ft_table_init(t_data *data, t_arguments *args, int i)
 	i = 1;
 	while (i < args->nb_philos)
 	{
-		philosopher = ft_philo_or_fork_init(PHILO, data, *args, i);
-		prev->next = philosopher;
-		philosopher->prev = prev;
+		philo = ft_philo_or_fork_init(PHILO, data, *args, i);
+		prev->next = philo;
+		philo->prev = prev;
 		fork = ft_philo_or_fork_init(FORK, data, *args, i);
-		philosopher->next = fork;
-		fork->prev = philosopher;
+		philo->next = fork;
+		fork->prev = philo;
 		prev = fork;
 		i++;
 	}

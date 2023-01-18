@@ -6,7 +6,7 @@
 /*   By: aradice <aradice@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 22:35:53 by aradice           #+#    #+#             */
-/*   Updated: 2023/01/17 01:02:33 by aradice          ###   ########.fr       */
+/*   Updated: 2023/01/18 19:04:52 by aradice          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ t_arguments	*ft_args_parsing(t_data *data, int argc, char **argv)
 	if (pthread_mutex_init(&data->display, NULL))
 		return (NULL);
 	if (pthread_mutex_init(&data->meal, NULL))
+		return (NULL);
+	if (pthread_mutex_init(&data->dead, NULL))
 		return (NULL);
 	return (args);
 }
