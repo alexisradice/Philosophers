@@ -71,3 +71,19 @@ void	ft_process_2(t_data *data, t_table *table, t_table *temp)
 	}
 	ft_exit_program(data, table);
 }
+
+int	ft_lock_dead(t_data *data, int bool_philo_dead)
+{
+	pthread_mutex_lock(&data->dead);
+	bool_philo_dead = data->bool_philo_dead;
+	pthread_mutex_unlock(&data->dead);
+	return (bool_philo_dead);
+}
+
+int	ft_lock_all_ate(t_data *data, int bool_all_ate)
+{
+	pthread_mutex_lock(&data->dead);
+	bool_all_ate = data->bool_all_ate;
+	pthread_mutex_unlock(&data->dead);
+	return (bool_all_ate);
+}

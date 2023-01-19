@@ -16,6 +16,8 @@ void	*ft_sleep_and_think(void *table)
 {
 	t_table	*temp;
 	t_data	*data;
+	int		bool_philo_dead;
+	int		bool_all_ate;
 
 	temp = (t_table *)table;
 	data = temp->data;
@@ -26,25 +28,25 @@ void	*ft_sleep_and_think(void *table)
 	}
 	if (temp->id % 2)
 		usleep(15000);
-	pthread_mutex_lock(&data->dead);
-	int bool_philo_dead = data->bool_philo_dead;
-	pthread_mutex_unlock(&data->dead);
+	bool_philo_dead = ft_lock_dead(data, bool_philo_dead);
 	while (!(bool_philo_dead))
 	{
-		if (temp->id % 2)
-			ft_philo_eat_left(temp);
-		else
-			ft_philo_eat_right(temp);
+		ft_left_or_right(temp);
+		bool_all_ate = ft_lock_all_ate(data, bool_all_ate);
 		if (data->bool_all_ate)
 			break ;
-		ft_write_text(data, temp->id, "is sleeping");
-		ft_wait_time(data, data->args->time_sleep);
-		ft_write_text(data, temp->id, "is thinking");
-		pthread_mutex_lock(&data->dead);
-		bool_philo_dead = data->bool_philo_dead;
-		pthread_mutex_unlock(&data->dead);
+		ft_write_sleep_think(data, temp);
+		bool_philo_dead = ft_lock_dead(data, bool_philo_dead);
 	}
 	return (NULL);
+}
+
+void	ft_left_or_right(t_table *temp)
+{
+	if (temp->id % 2)
+		ft_philo_eat_left(temp);
+	else
+		ft_philo_eat_right(temp);
 }
 
 void	ft_philo_eat_left(t_table *table)

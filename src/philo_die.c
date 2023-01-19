@@ -55,12 +55,15 @@ int	ft_philo_die_2(t_data *data, t_table *temp, int i)
 
 void	ft_philo_die_3(t_data *data, t_table *table, t_table *temp, int i)
 {
+	int	nb_finished_meal;
+
 	temp = table;
 	i = 0;
+	nb_finished_meal = 0;
 	while (temp)
 	{
 		pthread_mutex_lock(&data->meal);
-		int nb_finished_meal = temp->nb_finished_meal + 1;
+		nb_finished_meal = temp->nb_finished_meal + 1;
 		pthread_mutex_unlock(&data->meal);
 		if (temp->type == PHILO && data->args->nb_philos_must_eat != -1
 			&& nb_finished_meal >= data->args->nb_philos_must_eat - 1)
@@ -72,5 +75,16 @@ void	ft_philo_die_3(t_data *data, t_table *table, t_table *temp, int i)
 			break ;
 	}
 	if (i == data->args->nb_philos)
+	{
+		pthread_mutex_lock(&data->dead);
 		data->bool_all_ate = 1;
+		pthread_mutex_unlock(&data->dead);
+	}
+}
+
+void	ft_write_sleep_think(t_data *data, t_table *temp)
+{
+	ft_write_text(data, temp->id, "is sleeping");
+	ft_wait_time(data, data->args->time_sleep);
+	ft_write_text(data, temp->id, "is thinking");
 }
